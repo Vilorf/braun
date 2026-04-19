@@ -1,18 +1,10 @@
 const express = require('express')
 const exph = require('express-handlebars')
+const fortune = require('./lib/fortune')
 
 const app = express()
 
 const port = process.env.PORT || 3000
-
-const fortunes = [
-    "Победи свои страхи, или они победят тебя.",
-    "Рекам нужны истоки.",
-    "Не бойся неведомого.",
-    "Тебя ждет приятный сюрприз.",
-    "Будь проще везде, где только можно.",
-    "Не сдавайся, ну а если совсем плохо, то похуй - сдавайся"
-]
 
 // Настройка механизма представлений Handlebars
 app.use(express.static(__dirname + '/public'))
@@ -30,9 +22,9 @@ app.use((err, req, res, next) => {
 app.get('/', (req, res) => res.render('home'))
 
 app.get('/about', (req, res) => {
-    const randomFortune = fortunes[Math.floor(Math.random() * fortunes.length)]
+    
     console.log(randomFortune)
-    res.render('about', {fortune: randomFortune})
+    res.render('about', {fortune: fortune.getFortune()})
 })
 
 // Пользовательская страница 404
