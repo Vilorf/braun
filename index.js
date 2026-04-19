@@ -1,6 +1,6 @@
 const express = require('express')
 const exph = require('express-handlebars')
-const fortune = require('./lib/fortune')
+const handlers = require('./lib/handlers')
 
 const app = express()
 
@@ -12,26 +12,15 @@ app.engine('handlebars', exph.engine({ defaultLayout: 'main' }));
 app.set('view engine', 'handlebars')
 
 // Пользовательская страница 500
-app.use((err, req, res, next) => {
-    console.error(err.message)
-    res.status(500)
-    res.render('500')
-})
+app.use(handlers.serverError)
 
 // Добавляем маршруты сайта
-app.get('/', (req, res) => res.render('home'))
+app.get('/', handlers.home)
 
-app.get('/about', (req, res) => {
-    
-    console.log(randomFortune)
-    res.render('about', {fortune: fortune.getFortune()})
-})
+app.get('/about', handlers.about)
 
 // Пользовательская страница 404
-app.use((req, res) => {
-    res.status(404)
-    res.render('404')
-})
+app.use(handlers.notFound)
 
 app.listen(port, () => console.log(
     `Express запущен на http://localhost:${port}; ` + 
